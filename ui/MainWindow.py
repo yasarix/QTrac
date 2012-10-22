@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'MainWindow.ui'
 #
-# Created: Sun Oct 21 22:18:39 2012
+# Created: Mon Oct 22 02:10:20 2012
 #      by: PyQt4 UI code generator 4.9.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -18,12 +18,20 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
         MainWindow.setWindowModality(QtCore.Qt.NonModal)
-        MainWindow.resize(800, 600)
+        MainWindow.resize(914, 589)
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
+        self.verticalLayout = QtGui.QVBoxLayout(self.centralwidget)
+        self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
+        self.ticketListTree = QtGui.QTreeView(self.centralwidget)
+        self.ticketListTree.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
+        self.ticketListTree.setTabKeyNavigation(True)
+        self.ticketListTree.setAlternatingRowColors(True)
+        self.ticketListTree.setObjectName(_fromUtf8("ticketListTree"))
+        self.verticalLayout.addWidget(self.ticketListTree)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 914, 22))
         self.menubar.setDefaultUp(True)
         self.menubar.setObjectName(_fromUtf8("menubar"))
         self.menuFile = QtGui.QMenu(self.menubar)
