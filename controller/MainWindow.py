@@ -21,6 +21,9 @@ class MainWindow(QtGui.QMainWindow):
 		QtCore.QObject.connect(self.ui.actionRefreshTicketList, QtCore.SIGNAL(_fromUtf8("triggered()")), self.refreshTicketList)
 		QtCore.QObject.connect(self.ui.actionTicketQuery, QtCore.SIGNAL(_fromUtf8("triggered()")), self.modifyTicketQuery)
 		
+		QtCore.QTimer.singleShot(50, self.OnLoad)
+		
+	def OnLoad(self):
 		self.refreshTicketList()
 	
 	def refreshTicketList(self):
