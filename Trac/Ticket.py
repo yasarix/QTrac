@@ -18,5 +18,8 @@ class Ticket(object):
 		for ticket_id in self.connection.ticket.query("status!=closed"):
 			multicall.ticket.get(ticket_id)
 		
+		ticket_list = []
 		for ticket in multicall():
-			print str(ticket)
+			ticket_list.append(ticket)
+			
+		return ticket_list
