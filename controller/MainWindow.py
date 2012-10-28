@@ -7,6 +7,7 @@ from Trac.Ticket import Ticket
 from Trac.QueryConfig import QueryConfig
 from Error import *
 import Messages
+from datetime import datetime
 
 try:
 	_fromUtf8 = QtCore.QString.fromUtf8
@@ -65,12 +66,15 @@ class MainWindow(QtGui.QMainWindow):
 			
 			try:
 				found_tickets = ticket.listTickets(query['query'])
+				#print found_tickets
 				
 				for ticket in found_tickets:
+					ticket_datetime = datetime.strptime(str(ticket[3]['time']), "%Y%m%dT%H:%M:%S").__str__()
+					
 					parent_item.appendRow(
 							[
 								QtGui.QStandardItem(QtCore.QString(str(ticket[0]))),
-								QtGui.QStandardItem(QtCore.QString(str(ticket[3]['time']))),
+								QtGui.QStandardItem(QtCore.QString(ticket_datetime)),
 								QtGui.QStandardItem(QtCore.QString(str(ticket[3]['milestone']))),
 								QtGui.QStandardItem(QtCore.QString(str(ticket[3]['summary']))),
 								QtGui.QStandardItem(QtCore.QString(str(ticket[3]['type']))),
