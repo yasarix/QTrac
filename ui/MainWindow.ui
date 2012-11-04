@@ -68,7 +68,9 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionRefreshTicketList"/>
-   <addaction name="actionTicketQuery"/>
+   <addaction name="actionAddQuery"/>
+   <addaction name="actionModifyQuery"/>
+   <addaction name="actionDeleteQuery"/>
   </widget>
   <action name="actionExit">
    <property name="text">
@@ -90,16 +92,40 @@
     <string>Ctrl+R</string>
    </property>
   </action>
-  <action name="actionTicketQuery">
+  <action name="actionAddQuery">
    <property name="icon">
     <iconset>
-     <normaloff>../resources/edit-find-5.png</normaloff>../resources/edit-find-5.png</iconset>
+     <normaloff>../resources/edit-add.png</normaloff>../resources/edit-add.png</iconset>
    </property>
    <property name="text">
-    <string>Query</string>
+    <string>Add Query</string>
    </property>
    <property name="toolTip">
-    <string>Modify your query to server</string>
+    <string>Add a custom query</string>
+   </property>
+  </action>
+  <action name="actionModifyQuery">
+   <property name="icon">
+    <iconset>
+     <normaloff>../resources/edit-6.png</normaloff>../resources/edit-6.png</iconset>
+   </property>
+   <property name="text">
+    <string>Modify Query</string>
+   </property>
+   <property name="toolTip">
+    <string>Modify selected custome query</string>
+   </property>
+  </action>
+  <action name="actionDeleteQuery">
+   <property name="icon">
+    <iconset>
+     <normaloff>../resources/edit-remove-3.png</normaloff>../resources/edit-remove-3.png</iconset>
+   </property>
+   <property name="text">
+    <string>Delete Query</string>
+   </property>
+   <property name="toolTip">
+    <string>Delete selected custome query. Your tickets on server will not be deleted.</string>
    </property>
   </action>
  </widget>

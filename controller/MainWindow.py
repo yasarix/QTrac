@@ -24,7 +24,7 @@ class MainWindow(QtGui.QMainWindow):
 		
 		''' Signals '''
 		QtCore.QObject.connect(self.ui.actionRefreshTicketList, QtCore.SIGNAL(_fromUtf8("triggered()")), self.refreshTicketList)
-		QtCore.QObject.connect(self.ui.actionTicketQuery, QtCore.SIGNAL(_fromUtf8("triggered()")), self.modifyTicketQuery)
+		QtCore.QObject.connect(self.ui.actionModifyQuery, QtCore.SIGNAL(_fromUtf8("triggered()")), self.modifyTicketQuery)
 		
 		QtCore.QTimer.singleShot(50, self.OnLoad)
 		
