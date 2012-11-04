@@ -14,8 +14,11 @@ class Ticket(object):
 		self.connection = trac_server.connection
 	
 	def listTickets(self, criteria):
+		if len(criteria) == 0:
+			criteria = "status!=closed"
+		
 		multicall = xmlrpclib.MultiCall(self.connection)
-		for ticket_id in self.connection.ticket.query("status!=closed"):
+		for ticket_id in self.connection.ticket.query(criteria):
 			multicall.ticket.get(ticket_id)
 		
 		ticket_list = []

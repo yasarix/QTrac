@@ -1,1 +1,1 @@
-{"queries":[{"id":"0", "name":"My Tickets", "query":"owner=admin"},{"id":"1", "name":"Tickets That I'm Following", "query":"cc=admin"}]}
+{"queries":[{"id":"0", "name":"My Tickets", "query":"owner=admin"},{"id":"1", "name":"Tickets That I'm Following", "query":"cc=~admin"}]}

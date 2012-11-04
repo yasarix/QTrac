@@ -51,7 +51,7 @@ class MainWindow(QtGui.QMainWindow):
 			self.ui.statusbar.showMessage(_fromUtf8("Fetching list of tickets from server"))
 	
 			my_trac = TracServer(config.server_url, config.username, config.password)
-			ticket = Ticket(my_trac)
+			TicketServer = Ticket(my_trac)
 			
 			'''Ticket List Model'''
 			ticket_model = QtGui.QStandardItemModel(0, 7)
@@ -63,37 +63,36 @@ class MainWindow(QtGui.QMainWindow):
 			ticket_model.setHeaderData(5, QtCore.Qt.Horizontal, QtCore.QVariant("Owner"))
 			ticket_model.setHeaderData(6, QtCore.Qt.Horizontal, QtCore.QVariant("Status"))
 			
-			'''
-			ticket_model.insertRow(0)
-			'''
-			
 			self.ui.ticketListTree.setModel(ticket_model)
+			
 			for query in self.query_config.query_list:
 				parent_item = ticket_model.invisibleRootItem()
 				root_item = QtGui.QStandardItem(QtCore.QString(query['name']))
 				parent_item.appendRow(root_item)
 				parent_item = root_item
 				
+				found_tickets = None
 				try:
-					found_tickets = ticket.listTickets(query['query'])
-					#print found_tickets
+					found_tickets = TicketServer.listTickets(query['query'])
 					
-					for ticket in found_tickets:
-						ticket_datetime = datetime.strptime(str(ticket[3]['time']), "%Y%m%dT%H:%M:%S").__str__()
+					for found_ticket in found_tickets:
+						ticket_datetime = datetime.strptime(str(found_ticket[3]['time']), "%Y%m%dT%H:%M:%S").__str__()
 						
 						parent_item.appendRow(
 								[
-									QtGui.QStandardItem(QtCore.QString(str(ticket[0]))),
+									QtGui.QStandardItem(QtCore.QString(str(found_ticket[0]))),
 									QtGui.QStandardItem(QtCore.QString(ticket_datetime)),
-									QtGui.QStandardItem(QtCore.QString(str(ticket[3]['milestone']))),
-									QtGui.QStandardItem(QtCore.QString(str(ticket[3]['summary']))),
-									QtGui.QStandardItem(QtCore.QString(str(ticket[3]['type']))),
-									QtGui.QStandardItem(QtCore.QString(str(ticket[3]['owner']))),
-									QtGui.QStandardItem(QtCore.QString(str(ticket[3]['status'])))
+									QtGui.QStandardItem(QtCore.QString(str(found_ticket[3]['milestone']))),
+									QtGui.QStandardItem(QtCore.QString(str(found_ticket[3]['summary']))),
+									QtGui.QStandardItem(QtCore.QString(str(found_ticket[3]['type']))),
+									QtGui.QStandardItem(QtCore.QString(str(found_ticket[3]['owner']))),
+									QtGui.QStandardItem(QtCore.QString(str(found_ticket[3]['status'])))
 								])
 				except AttributeError:
-					pass
-			
+					continue
+				else:
+					continue
+							
 			self.ui.statusbar.showMessage("")
 			self.ui.ticketListTree.expandAll()
 		finally:
