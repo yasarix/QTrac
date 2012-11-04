@@ -23,7 +23,6 @@ class MainWindow(QtGui.QMainWindow):
 		self.ui.setupUi(self)
 		
 		''' Signals '''
-		#self.ui.pushButton.clicked.connect(self.PushButtonClicked)
 		QtCore.QObject.connect(self.ui.actionRefreshTicketList, QtCore.SIGNAL(_fromUtf8("triggered()")), self.refreshTicketList)
 		QtCore.QObject.connect(self.ui.actionTicketQuery, QtCore.SIGNAL(_fromUtf8("triggered()")), self.modifyTicketQuery)
 		
