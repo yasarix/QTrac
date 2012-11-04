@@ -8,6 +8,7 @@ from Trac.QueryConfig import QueryConfig
 from Error import *
 import Messages
 from datetime import datetime
+import webbrowser
 
 try:
 	_fromUtf8 = QtCore.QString.fromUtf8
@@ -25,6 +26,7 @@ class MainWindow(QtGui.QMainWindow):
 		''' Signals '''
 		QtCore.QObject.connect(self.ui.actionRefreshTicketList, QtCore.SIGNAL(_fromUtf8("triggered()")), self.refreshTicketList)
 		QtCore.QObject.connect(self.ui.actionModifyQuery, QtCore.SIGNAL(_fromUtf8("triggered()")), self.modifyTicketQuery)
+		self.ui.ticketListTree.doubleClicked.connect(self.TicketTreeDoubleClicked)
 		
 		QtCore.QTimer.singleShot(50, self.OnLoad)
 		
@@ -96,3 +98,17 @@ class MainWindow(QtGui.QMainWindow):
 
 	def modifyTicketQuery(self):
 		self.ui.statusbar.showMessage("Modifying query")
+	
+	def TicketTreeDoubleClicked(self, index):
+		try:
+			''' Try to get ticket number '''
+			row_parent = index.model().itemFromIndex(index).parent()
+			ticket_number = row_parent.child(index.row(), 0).text()
+			url = "http://" + config.server_url + "/ticket/" + ticket_number
+			
+			''' Open ticket in browser window '''
+			webbrowser.open_new_tab(url)
+		except AttributeError:
+			pass
+		else:
+			pass
