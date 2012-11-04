@@ -36,9 +36,6 @@ class MainWindow(QtGui.QMainWindow):
 			self.ui.ticketListTree.expandAll()
 			
 			''' Setup a timer to keep refreshing ticket list '''
-			refresh_timer = QtCore.QTimer()
-			refresh_timer.timeout.connect(self.refreshTicketList)
-			refresh_timer.start(config.refresh_interval)
 			self.query_config = QueryConfig()
 			self.refreshTicketList()
 		except QueryError, e:
@@ -47,9 +44,9 @@ class MainWindow(QtGui.QMainWindow):
 		
 	
 	def refreshTicketList(self):
-		try:
-			self.ui.statusbar.showMessage(_fromUtf8("Fetching list of tickets from server"))
-	
+		self.ui.statusbar.showMessage("Fetching list of tickets from server")
+		
+		try:	
 			my_trac = TracServer(config.server_url, config.username, config.password)
 			TicketServer = Ticket(my_trac)
 			
@@ -93,10 +90,10 @@ class MainWindow(QtGui.QMainWindow):
 				else:
 					continue
 							
-			self.ui.statusbar.showMessage("")
-			self.ui.ticketListTree.expandAll()
 		finally:
 			QtCore.QTimer.singleShot(config.refresh_interval, self.refreshTicketList)
+			self.ui.statusbar.showMessage("")
+			self.ui.ticketListTree.expandAll()
 
 	def modifyTicketQuery(self):
 		self.ui.statusbar.showMessage("Modifying query")
