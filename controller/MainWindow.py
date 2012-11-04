@@ -31,60 +31,73 @@ class MainWindow(QtGui.QMainWindow):
 		
 	def OnLoad(self):
 		try:
+			''' Setup ticket tree '''
+			self.ui.ticketListTree.setItemsExpandable(True)
+			self.ui.ticketListTree.expandAll()
+			
+			''' Setup a timer to keep refreshing ticket list '''
+			refresh_timer = QtCore.QTimer()
+			refresh_timer.timeout.connect(self.refreshTicketList)
+			refresh_timer.start(config.refresh_interval)
 			self.query_config = QueryConfig()
 			self.refreshTicketList()
 		except QueryError, e:
 			msgbox = Messages.MessageBox()
 			msgbox.showMessageWithError(e)
+		
 	
 	def refreshTicketList(self):
-		self.ui.statusbar.showMessage(_fromUtf8("Fetching list of tickets from server"))
-
-		my_trac = TracServer(config.server_url, config.username, config.password)
-		ticket = Ticket(my_trac)
-		
-		'''Ticket List Model'''
-		ticket_model = QtGui.QStandardItemModel(0, 7)
-		ticket_model.setHeaderData(0, QtCore.Qt.Horizontal, QtCore.QVariant("Ticket Number"))
-		ticket_model.setHeaderData(1, QtCore.Qt.Horizontal, QtCore.QVariant("Creation Date"))
-		ticket_model.setHeaderData(2, QtCore.Qt.Horizontal, QtCore.QVariant("Milestone"))
-		ticket_model.setHeaderData(3, QtCore.Qt.Horizontal, QtCore.QVariant("Summary"))
-		ticket_model.setHeaderData(4, QtCore.Qt.Horizontal, QtCore.QVariant("Type"))
-		ticket_model.setHeaderData(5, QtCore.Qt.Horizontal, QtCore.QVariant("Owner"))
-		ticket_model.setHeaderData(6, QtCore.Qt.Horizontal, QtCore.QVariant("Status"))
-		
-		'''
-		ticket_model.insertRow(0)
-		'''
-		
-		self.ui.ticketListTree.setModel(ticket_model)
-		for query in self.query_config.query_list:
-			parent_item = ticket_model.invisibleRootItem()
-			root_item = QtGui.QStandardItem(QtCore.QString(query['name']))
-			parent_item.appendRow(root_item)
-			parent_item = root_item
+		try:
+			self.ui.statusbar.showMessage(_fromUtf8("Fetching list of tickets from server"))
+	
+			my_trac = TracServer(config.server_url, config.username, config.password)
+			ticket = Ticket(my_trac)
 			
-			try:
-				found_tickets = ticket.listTickets(query['query'])
-				#print found_tickets
+			'''Ticket List Model'''
+			ticket_model = QtGui.QStandardItemModel(0, 7)
+			ticket_model.setHeaderData(0, QtCore.Qt.Horizontal, QtCore.QVariant("Ticket Number"))
+			ticket_model.setHeaderData(1, QtCore.Qt.Horizontal, QtCore.QVariant("Creation Date"))
+			ticket_model.setHeaderData(2, QtCore.Qt.Horizontal, QtCore.QVariant("Milestone"))
+			ticket_model.setHeaderData(3, QtCore.Qt.Horizontal, QtCore.QVariant("Summary"))
+			ticket_model.setHeaderData(4, QtCore.Qt.Horizontal, QtCore.QVariant("Type"))
+			ticket_model.setHeaderData(5, QtCore.Qt.Horizontal, QtCore.QVariant("Owner"))
+			ticket_model.setHeaderData(6, QtCore.Qt.Horizontal, QtCore.QVariant("Status"))
+			
+			'''
+			ticket_model.insertRow(0)
+			'''
+			
+			self.ui.ticketListTree.setModel(ticket_model)
+			for query in self.query_config.query_list:
+				parent_item = ticket_model.invisibleRootItem()
+				root_item = QtGui.QStandardItem(QtCore.QString(query['name']))
+				parent_item.appendRow(root_item)
+				parent_item = root_item
 				
-				for ticket in found_tickets:
-					ticket_datetime = datetime.strptime(str(ticket[3]['time']), "%Y%m%dT%H:%M:%S").__str__()
+				try:
+					found_tickets = ticket.listTickets(query['query'])
+					#print found_tickets
 					
-					parent_item.appendRow(
-							[
-								QtGui.QStandardItem(QtCore.QString(str(ticket[0]))),
-								QtGui.QStandardItem(QtCore.QString(ticket_datetime)),
-								QtGui.QStandardItem(QtCore.QString(str(ticket[3]['milestone']))),
-								QtGui.QStandardItem(QtCore.QString(str(ticket[3]['summary']))),
-								QtGui.QStandardItem(QtCore.QString(str(ticket[3]['type']))),
-								QtGui.QStandardItem(QtCore.QString(str(ticket[3]['owner']))),
-								QtGui.QStandardItem(QtCore.QString(str(ticket[3]['status'])))
-							])
-			except AttributeError:
-				pass
-		
-		self.ui.statusbar.showMessage("")
+					for ticket in found_tickets:
+						ticket_datetime = datetime.strptime(str(ticket[3]['time']), "%Y%m%dT%H:%M:%S").__str__()
+						
+						parent_item.appendRow(
+								[
+									QtGui.QStandardItem(QtCore.QString(str(ticket[0]))),
+									QtGui.QStandardItem(QtCore.QString(ticket_datetime)),
+									QtGui.QStandardItem(QtCore.QString(str(ticket[3]['milestone']))),
+									QtGui.QStandardItem(QtCore.QString(str(ticket[3]['summary']))),
+									QtGui.QStandardItem(QtCore.QString(str(ticket[3]['type']))),
+									QtGui.QStandardItem(QtCore.QString(str(ticket[3]['owner']))),
+									QtGui.QStandardItem(QtCore.QString(str(ticket[3]['status'])))
+								])
+				except AttributeError:
+					pass
+			
+			self.ui.statusbar.showMessage("")
+			self.ui.ticketListTree.expandAll()
+		finally:
+			QtCore.QTimer.singleShot(config.refresh_interval, self.refreshTicketList)
 
 	def modifyTicketQuery(self):
 		self.ui.statusbar.showMessage("Modifying query")

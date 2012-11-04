@@ -18,4 +18,7 @@ class MessageBox(QtGui.QMessageBox):
 		
 		self.exec_()
 
-		pass
+	def showMessageWithText(self, message_text):
+		self.setText(message_text)
+		self.setIcon(self.Information)
+		self.exec_()
